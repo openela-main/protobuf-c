@@ -1,22 +1,23 @@
 Name:           protobuf-c
 Version:        1.3.0
-Release:        6%{?dist}
+Release:        8%{?dist}
 Summary:        C bindings for Google's Protocol Buffers
 
 License:        BSD
 URL:            https://github.com/protobuf-c/protobuf-c
 Source0:        https://github.com/protobuf-c/protobuf-c/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Patch0:         %{url}/commit/ec3d900001a13ccdaa8aef996b34c61159c76217.patch
 
 BuildRequires:  autoconf automake libtool
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(protobuf)
 
 %description
-Protocol Buffers are a way of encoding structured data in an efficient yet 
+Protocol Buffers are a way of encoding structured data in an efficient yet
 extensible format. This package provides a code generator and run-time
 libraries to use Protocol Buffers from pure C (not C++).
 
-It uses a modified version of protoc called protoc-c. 
+It uses a modified version of protoc called protoc-c.
 
 %package compiler
 Summary:        Protocol Buffers C compiler
@@ -36,6 +37,7 @@ This package contains protobuf-c headers and libraries.
 
 %prep
 %setup -q
+%patch -P 0 -p 1
 
 %build
 autoreconf -ifv
@@ -67,6 +69,12 @@ rm -vf $RPM_BUILD_ROOT/%{_libdir}/libprotobuf-c.la
 %{_libdir}/pkgconfig/libprotobuf-c.pc
 
 %changelog
+* Tue Apr 25 2023 Adrian Reber <areber@redhat.com> - 1.3.0-8
+- Rebuild for gating test
+
+* Mon Apr 24 2023 Adrian Reber <areber@redhat.com> - 1.3.0-7
+- Applied patch for for CVE-2022-48468 (#2186678)
+
 * Wed Feb 03 2021 Petr Menšík <pemensik@redhat.com> - 1.3.0-6
 - Rebuild for gating test (#1919904)
 
