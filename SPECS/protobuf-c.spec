@@ -1,11 +1,12 @@
 Name:           protobuf-c
 Version:        1.3.3
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        C bindings for Google's Protocol Buffers
 
 License:        BSD
 URL:            https://github.com/protobuf-c/protobuf-c
 Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Patch0:         %{url}/commit/ec3d900001a13ccdaa8aef996b34c61159c76217.patch
 
 BuildRequires: make
 BuildRequires:  gcc-c++
@@ -36,6 +37,7 @@ This package contains protobuf-c headers and libraries.
 
 %prep
 %setup -q
+%patch -P 0 -p 1
 
 %build
 %configure --disable-static
@@ -66,6 +68,9 @@ rm -vf $RPM_BUILD_ROOT/%{_libdir}/libprotobuf-c.la
 %{_libdir}/pkgconfig/libprotobuf-c.pc
 
 %changelog
+* Fri Apr 14 2023 Adrian Reber <areber@redhat.com> - 1.3.3-13
+- Applied patch for for CVE-2022-48468 (#2186677)
+
 * Thu Feb 24 2022 Adrian Reber <areber@redhat.com> - 1.3.3-12
 - Adapt tests to protobuf-c 1.3.3
 
